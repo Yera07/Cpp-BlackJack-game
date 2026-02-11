@@ -1,142 +1,129 @@
-# Cpp-BlackJack-game
-The BlackJack game written in C++
-
 🃏 Blackjack Console Game (C++)
-📌 Overview
+Introduction
 
-This project is a console-based implementation of the classic Blackjack (21) card game written in C++.
-The player competes against a computer-controlled dealer using standard Blackjack rules.
+This project is a console-based implementation of the classic Blackjack card game written in C++.
+The program allows a single player to play against a computer-controlled dealer using standard Blackjack rules.
 
-The game focuses on logic, object-oriented programming, and clean structure rather than graphics. It demonstrates how a real card game can be simulated using core C++ concepts.
-
-🎯 Project Purpose
-
-The main goal of this project is to apply and demonstrate:
+The main purpose of this project is to demonstrate practical usage of:
 
 Object-Oriented Programming (classes and structures)
 
-STL containers (std::vector)
+STL containers (vector)
 
-Random number generation (std::mt19937)
+Random number generation (<random>)
 
-Conditional statements and loops
+Control flow and game logic
 
 Input validation
 
-Modular and readable code design
+Modular function design
 
-This project is suitable for beginner and intermediate C++ students.
+The game runs entirely in the terminal and focuses on logic rather than graphical interface.
 
-⚙️ How It Works (Program Principle)
+Principle of the Program
 
-The game simulates a real Blackjack round using structured logic:
+The core principle of the program is simulation of a real Blackjack game using structured programming and object-oriented design.
 
-Card structure represents a playing card (rank + suit)
+The system is built around:
 
-Deck class builds, shuffles, and deals cards
+Card structure → represents a single playing card
 
-handScore() calculates the total score of a hand
+Deck class → builds, shuffles, and distributes cards
 
-Dealer logic automatically draws cards according to rules
+Game logic functions → calculate hand score and determine the winner
 
-A betting system manages player balance
+Main loop → manages betting system and repeated rounds
 
-Each round follows this sequence:
+Randomness is implemented using std::mt19937 to ensure fair card shuffling.
+
+The program follows a clear game cycle:
 
 Player places a bet
 
-Deck is shuffled
+Cards are dealt
 
-Two cards are dealt to player and dealer
-
-Player chooses to Hit or Stand
+Player makes decisions (Hit / Stand)
 
 Dealer plays automatically
 
-Winner is determined
+Result is calculated
 
-Balance is updated
+Money is updated
 
-📝 Game Rules
+Game Rules
 
-Goal: Get as close to 21 as possible without exceeding it.
+This implementation follows standard Blackjack rules:
 
-Number cards (2–10) = face value.
+The goal is to get as close to 21 as possible without exceeding it.
 
-J, Q, K = 10.
+Number cards (2–10) are worth their face value.
 
-Ace = 11 or 1 (automatically adjusted to prevent bust).
+J, Q, K are worth 10.
 
-Dealer draws cards while score < 17.
+Ace is worth 11, but automatically converts to 1 if the total exceeds 21.
 
-If player score > 21 → Player busts.
+The dealer draws cards while:
 
-If dealer score > 21 → Dealer busts.
+Score is less than 17
 
-Equal scores → Push (no money change).
+Total cards are fewer than 5
 
-Player starts with $1000 virtual balance.
+If both player and dealer bust → Push (no money change).
 
-▶️ How to Play
+Equal scores → Push.
 
-Compile and run the program.
+Player starts with $1000 virtual money.
+
+How to Play
+
+Run the program.
 
 Enter your bet amount.
 
-During your turn:
+After cards are dealt:
 
-Type h to Hit (take another card)
+Press h → Hit (take another card)
 
-Type s to Stand (end your turn)
+Press s → Stand (end your turn)
 
-After the dealer plays, results are shown.
+Dealer plays automatically.
 
-Type y to continue or n to exit.
+The result of the round is displayed.
+
+Choose y to continue or n to quit.
 
 The game continues until:
 
-The player quits, or
+The player chooses to stop, or
 
-The balance reaches $0.
+The player loses all money.
 
-💻 Compilation
+Conclusion
 
-Using g++:
+This project demonstrates how classic games can be implemented using core C++ concepts without graphical libraries.
 
-g++ main.cpp -o blackjack
-./blackjack
+It reinforces understanding of:
 
-
-Make sure your compiler supports C++11 or higher.
-
-🚀 Possible Improvements
-
-Future enhancements may include:
-
-Blackjack (natural 21) bonus payout
-
-Split and Double Down options
-
-Multiple players
-
-Persistent score saving
-
-Graphical user interface (GUI)
-
-Statistics tracking
-
-📚 Educational Value
-
-This project strengthens understanding of:
-
-Game state management
+OOP design
 
 Randomized simulations
 
-Clean class design
+Logical branching
 
-Console user interaction
+Input validation
 
-Practical use of STL
+State management
 
-It serves as a solid foundation for more advanced C++ projects and game development.
+The program is simple but scalable. Future improvements may include:
+
+Blackjack (natural 21) bonus logic
+
+Multiple players
+
+Split and Double Down options
+
+Persistent score system
+
+Graphical interface version
+
+This project serves as a solid foundation for more advanced game development in C++.
