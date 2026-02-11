@@ -1,0 +1,227 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <random>
+#include <ctime>
+#include <limits>
+
+using namespace std;
+
+struct Card {
+    string rank;
+    string suit;
+
+    string toString() const {
+        return "[" + rank + suit + "]";
+    }
+};
+
+class Deck {
+private:
+    vector<Card> cards;
+    size_t index = 0;
+
+public:
+    Deck() { build(); }
+
+    void build() {
+        cards.clear();
+        index = 0;
+
+        // ASCII масти (работают везде)
+        vector<string> suits = {"H", "D", "C", "S"};
+        vector<string> ranks = {"2","3","4","5","6","7","8","9","10","J","Q","K","A"};
+
+        for (const auto& s : suits) {
+            for (const auto& r : ranks) {
+                cards.push_back({r, s});
+            }
+        }
+    }
+
+    void shuffleDeck() {
+        static mt19937 rng(static_cast<unsigned>(time(nullptr)));
+        shuffle(cards.begin(), cards.end(), rng);
+        index = 0;
+    }
+
+    Card deal() {
+        if (index >= cards.size()) {
+            build();
+            shuffleDeck();
+        }
+        return cards[index++];
+    }
+};
+
+int cardValue(const Card& c) {
+    if (c.rank == "A") return 11;
+    if (c.rank == "K" || c.rank == "Q" || c.rank == "J") return 10;
+    return stoi(c.rank);
+}
+
+int handScore(const vector<Card>& hand) {
+    int total = 0;
+    int aces = 0;
+
+    for (const auto& c : hand) {
+        total += cardValue(c);
+        if (c.rank == "A") aces++;
+    }
+
+    while (total > 21 && aces > 0) {
+        total -= 10;
+        aces--;
+    }
+
+    return total;
+}
+
+void printHand(const string& name, const vector<Card>& hand) {
+    cout << name << ": ";
+    for (const auto& card : hand) {
+        cout << card.toString() << " ";
+    }
+    cout << "(score: " << handScore(hand) << ")";
+    cout << "\n";
+}
+
+bool askYesNo(const string& prompt) {
+    while (true) {
+        cout << prompt << " (y/n): ";
+        string s;
+        cin >> s;
+        if (s == "y" || s == "Y") return true;
+        if (s == "n" || s == "N") return false;
+        cout << "Please type y or n.\n";
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    Deck deck;
+    int money = 1000;
+
+    // ===== Instructions =====
+    cout << "================ BLACKJACK =================\n";
+    cout << "Controls:\n";
+    cout << "  h - Hit (take a card)\n";
+    cout << "  s - Stand (end your turn)\n";
+    cout << "  y - Yes\n";
+    cout << "  n - No\n";
+    cout << "Goal: Get as close to 21 as possible.\n";
+    cout << "You start with $1000.\n";
+    cout << "============================================\n\n";
+
+    while (money > 0) {
+
+        cout << "Your balance: $" << money << "\n";
+
+        int bet;
+        while (true) {
+            cout << "Enter bet amount: ";
+            cin >> bet;
+
+            if (!cin) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input.\n";
+                continue;
+            }
+
+            if (bet <= 0) cout << "Bet must be positive.\n";
+            else if (bet > money) cout << "You can't bet more than you have.\n";
+            else break;
+        }
+
+        deck.shuffleDeck();
+
+        vector<Card> player, dealer;
+
+        // Initial deal
+        player.push_back(deck.deal());
+        dealer.push_back(deck.deal());
+        player.push_back(deck.deal());
+        dealer.push_back(deck.deal());
+
+        cout << "\n--- New Hand ---\n";
+        printHand("Dealer", dealer);
+        printHand("Player", player);
+        cout << "\n";
+
+        // ===== Player Turn =====
+        bool playerBust = false;
+
+        while (true) {
+            int pScore = handScore(player);
+
+            if (pScore > 21) {
+                playerBust = true;
+                cout << "You busted!\n";
+                break;
+            }
+
+            cout << "Choose action (h = Hit, s = Stand): ";
+            string choice;
+            cin >> choice;
+
+            if (choice == "h" || choice == "H") {
+                player.push_back(deck.deal());
+                printHand("Player", player);
+            } else if (choice == "s" || choice == "S") {
+                break;
+            } else {
+                cout << "Invalid choice. Type h or s.\n";
+            }
+        }
+
+        // ===== Dealer Turn =====
+        cout << "\nDealer's turn...\n";
+        while (handScore(dealer) < 17) {
+            dealer.push_back(deck.deal());
+        }
+
+        cout << "\n--- Final Results ---\n";
+        printHand("Dealer", dealer);
+        printHand("Player", player);
+
+        int pScore = handScore(player);
+        int dScore = handScore(dealer);
+
+        if (playerBust) {
+            cout << "You lose $" << bet << ".\n";
+            money -= bet;
+        }
+        else if (dScore > 21) {
+            cout << "Dealer busted! You win $" << bet << "!\n";
+            money += bet;
+        }
+        else if (pScore > dScore) {
+            cout << "You win $" << bet << "!\n";
+            money += bet;
+        }
+        else if (pScore < dScore) {
+            cout << "Dealer wins. You lose $" << bet << ".\n";
+            money -= bet;
+        }
+        else {
+            cout << "Push (tie). No money change.\n";
+        }
+
+        cout << "\n";
+        if (money <= 0) break;
+
+        if (!askYesNo("Play another round?")) {
+            cout << "You finished with $" << money << ".\n";
+            return 0;
+        }
+
+        cout << "\n";
+    }
+
+    cout << "Game over! You lost all your money.\n";
+    return 0;
+}
