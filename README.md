@@ -1,6 +1,5 @@
 # Cpp-BlackJack-game
 The BlackJack game written in C++
-Вот готовый, аккуратно оформленный текст для README.md. Можно вставлять прямо в GitHub.
 
 🃏 Blackjack Console Game (C++)
 📌 Overview
