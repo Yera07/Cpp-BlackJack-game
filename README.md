@@ -1,3 +1,5 @@
+<img width="2947" height="2042" alt="image" src="https://github.com/user-attachments/assets/c9581ce9-3e17-49dd-aba2-9c5fec148809" />
+
 🃏 Blackjack Console Game (C++)
 Introduction
 
